@@ -1,5 +1,6 @@
 import { todos } from "./constant/data";
 import { useState } from "react";
+import Profile from "./assets/profile.jpg";
 
 function App() {
   const [list, setList] = useState(todos);
@@ -7,6 +8,20 @@ function App() {
 
   function Onfilter() {
     setList(todos.filter((todo) => todo.title.includes(filter)));
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+  }
+
+  function handleDrag(e) {
+    e.dataTransfer.setData("text", e.target.id);
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    let data = e.dataTransfer.getData("text");
+    e.target.appendChild(document.getElementById(data));
   }
 
   if (list.length === 0) {
@@ -48,6 +63,35 @@ function App() {
   } else {
     return (
       <div className="ml-14">
+        <div className="mt-10 flex justify-between w-96">
+          <div
+            className="border-2 w-32 h-32  flex"
+            onDragOver={(e) => handleDragOver(e)}
+            onDrop={(e) => handleDrop(e)}
+          >
+            <img
+              src={Profile}
+              alt=""
+              className="w-20 h-28"
+              onDragStart={(e) => handleDrag(e)}
+              id="drag1"
+            />
+            <p onDragStart={(e) => handleDrag(e)} id="drap2">hello</p>
+          </div>
+
+          <div
+            className="border-2 w-32 h-32 justify-center items-center flex"
+            onDragOver={(e) => handleDragOver(e)}
+            onDrop={(e) => handleDrop(e)}
+          ></div>
+
+          <div
+            className="border-2 w-32 h-32 justify-center items-center flex"
+            onDragOver={(e) => handleDragOver(e)}
+            onDrop={(e) => handleDrop(e)}
+          ></div>
+        </div>
+
         <div className=" grid grid-rows-1 gap-4">
           <div className="flex w-96 mt-8 justify-between mb-2">
             <div>
@@ -82,10 +126,11 @@ function App() {
                 <div className="w-14">
                   <p>{todo.id}</p>
                 </div>
-                <div className={`w-60 text-left ${
-                  todo.completed ? 'line-through' :
-                  ''
-                }`}>
+                <div
+                  className={`w-60 text-left ${
+                    todo.completed ? "line-through" : ""
+                  }`}
+                >
                   <p> {todo.title}</p>
                 </div>
 
